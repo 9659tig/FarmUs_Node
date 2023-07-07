@@ -7,7 +7,7 @@ module.exports = function (app) {
     app.post('/farm/postings', farm.newFarm);
 
     //농장목록 조회
-    app.get("/api/postings", farm.getFarmlist);
+    app.get("/farm/list", farm.getFarmlist);
 
     //농장 세부사항 조회
     app.get("/farm/detail/:farmid", farm.getFarmDetail);
@@ -26,5 +26,4 @@ module.exports = function (app) {
 
     //농장 글 수정
     app.patch('/farm/editInfo',uploadImg ,farm.editFarm);
-    //app.post('/farm/editInfo',uploadImg, farm.editFarm);
 };

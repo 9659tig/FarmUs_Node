@@ -15,7 +15,7 @@ const setDate = require('./../../helpers/setDate');
 exports.login = async(email, password) =>{
 
     const userInfo = await userProvider.usersbyEmail(email);
-    if (userInfo.length < 1) return errResponse2(resStatus.USER_USEREMAIL_NOT_EXIST);
+    if (userInfo.length < 1) return errResponse(resStatus.USER_USEREMAIL_NOT_EXIST);
 
     const userPassword = userInfo[0].Password;
     const userSalt = userInfo[0].Salt;
@@ -124,8 +124,7 @@ exports.editPassword = async (email,password) =>{
     const encryptedData = await encryptedPassword.createHashedPassword(password);
     const hashedPassword = encryptedData.hashedPassword;
     const salt = encryptedData.salt;
-    const now = await setDate.now();
-    const newUserInfo = [hashedPassword, salt, now, email];
+    const newUserInfo = [hashedPassword, salt, email];
 
     const connection = await pool.getConnection(async conn => conn);
 
@@ -133,7 +132,7 @@ exports.editPassword = async (email,password) =>{
 
     connection.release();
 
-    return response(resStatus_5000.USER_PASSWORD_EDIT_SUCCESS, null)
+    return response(resStatus_5000.USER_PASSWORD_EDIT_SUCCESS)
 }
 
 exports.editNickName = async (email,nickname) =>{

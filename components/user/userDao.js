@@ -88,19 +88,19 @@ async function updateUserBirth(connection, birthRequest) {
 
 async function selectUser(connection, phoneNumber){
     const selectUserQuery = `
-    SELECT Name, Email
+    SELECT Name, Email, Status
     FROM User
     WHERE PhoneNumber = ?;`;
     const [userRow] = await connection.query(selectUserQuery,  phoneNumber);
     return userRow;
 }
 
-async function updatePassword(connection, email, pw) {
+async function updatePassword(connection, userInfo) {
     const updateUserQuery = `
     UPDATE User
-    SET Password = ?
+    SET Password = ?, Salt = ?
     WHERE Email = ?;`;
-    const updateUserRow = await connection.query(updateUserQuery, [pw, email]);
+    const updateUserRow = await connection.query(updateUserQuery, userInfo);
     return updateUserRow[0];
 }
 
