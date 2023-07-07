@@ -15,22 +15,37 @@ const dateAvailability = require('../../helpers/DateAvailability');
 const userProvider = require('../user/userProvider');
 
 exports.getFarmlist = async (req, res) => {
-    try{
-        const getFarmResult = await farmProvider.retrieveFarmlist();
-        return res.send(response(resStatus_5000.FARM_LIST_AVAILABLE_FOR_RESERVATION, getFarmResult));
+    // try{
+        const email = req.params.email;
+        const invalidation = await validator.oneParams(email);
+
+        if (invalidation) return (res.send(response(invalidation)));
+
+        const FarmListResponse = await farmService.getFarmList(email);
+
+        // console.log(FarmDetailResponse)
+        return res.send(FarmListResponse);
+    // }
+    // catch (e) {
+    //     res.send(errResponse(resStatus.SERVER_ERROR));
+    // }
+}
+
+exports.getFarmDetail = async (req, res) => {
+    try {
+        const farmID = req.params.farmid;
+        const invalidation = await validator.oneParams(farmID);
+
+        if (invalidation) return (res.send(response(invalidation)));
+
+        const FarmDetailResponse = await farmService.getFarmDetail(farmID);
+
+        return res.send(FarmDetailResponse);
+
     }
     catch (e) {
         res.send(errResponse(resStatus.SERVER_ERROR));
     }
-}
-
-exports.getFarmDetail = async (req, res) => {
-    const { farmid } = req.params;
-
-    if(!farmid) return res.render(errResponse(FARMID_EMPTY));
-
-    const getFarmDetail = await farmProvider.retrieveFarmDetail(Farmidx);
-    return res.render(response(resStatus.SUCCESS, getFarmDetail));
 }
 
 exports.getFarmUsedList = async (req, res) => {
